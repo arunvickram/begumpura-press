@@ -1,5 +1,5 @@
 module Head
-  ( mkHead
+  (
   )
   where
 
