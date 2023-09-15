@@ -1,4 +1,7 @@
-module Begumpura.Press.Components.Hero where
+module Begumpura.Press.Components.Hero
+  ( hero
+  )
+  where
 
 import Prelude
 
@@ -11,7 +14,7 @@ import React.Basic.Events (handler_)
 import React.Basic.Hooks as React
 
 type Props = {}
-hero :: React.Component Props
+hero ∷ React.Component Props
 hero = do
   React.component "Hero" \props -> React.do
     pure $ R.main {} "Hero"

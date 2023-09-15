@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "npm run build:spago && npm run build:next",
+    "gen:graphql-schema": "node gen_schema.mjs",
     "build:spago": "spago build",
     "build:next": "next build",
     "start": "next start",
@@ -12,6 +13,7 @@
     "test": "spago test"
   },
   "dependencies": {
+    "@apollo/client": "^3.8.3",
     "@next/font": "13.1.2",
     "@nextui-org/react": "^2.1.12",
     "eslint": "8.31.0",
@@ -28,6 +30,7 @@
     "autoprefixer": "^10.4.15",
     "postcss": "^8.4.29",
     "purescript": "^0.15.10",
+    "purescript-graphql-client": "^10.0.0",
     "spago": "0.20.9",
     "tailwindcss": "^3.3.3"
   }
