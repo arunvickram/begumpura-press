@@ -16,13 +16,15 @@
     "@apollo/client": "^3.8.3",
     "@next/font": "13.1.2",
     "@nextui-org/react": "^2.1.12",
+    "bufferutil": "^4.0.7",
     "eslint": "8.31.0",
     "eslint-config-next": "13.1.2",
     "framer-motion": "^10.16.4",
     "next": "^13.4.19",
     "next-i18n-router": "^3.2.0",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "utf-8-validate": "^6.0.3"
   },
   "devDependencies": {
     "@types/node": "20.6.0",

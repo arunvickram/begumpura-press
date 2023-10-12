@@ -1,0 +1,27 @@
+{
+  "eng": {
+    "code": "eng",
+    "name": "English"
+  },
+  "asm": {
+    "code": "asm",
+    "name": "Assamese"
+  },
+  "ben": {
+    "code": "ben",
+    "name": "Bengali"
+  },
+  "guj": {
+    "code": "guj",
+    "name": "Gujarati"
+  },
+  "mal": {
+    "code": "mal",
+    "name": "Malayalam"
+  },
+  "mar": {
+    "code": "mar",
+    "name": "Marathi"
+  }
+  // TODO finish
+}

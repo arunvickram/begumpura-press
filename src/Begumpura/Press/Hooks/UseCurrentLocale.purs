@@ -5,6 +5,7 @@ import Prelude
 import Effect (Effect)
 import React.Basic.Hooks (Hook, JSX, ReactComponent, unsafeHook)
 
+
 foreign import useCurrentLocale_ :: Effect String
 
 foreign import data UseCurrentLocale :: Type -> Type

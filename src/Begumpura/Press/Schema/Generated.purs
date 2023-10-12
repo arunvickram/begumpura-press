@@ -3,14 +3,18 @@ module Begumpura.Press.Schema.Generated where
 import Data.Maybe (Maybe)
 import Data.Newtype (class Newtype)
 import GraphQL.Client.Args (class ArgGql, class RecordArg, NotNull)
-
+import GraphQL.Client.Union (GqlUnion)
 import GraphQL.Client.ID (ID)
-import Begumpura.Press.Schema.Generated.Enum.LocaleInputType (LocaleInputType)
 import Begumpura.Press.Schema.Generated.Enum.FallbackLocaleInputType (FallbackLocaleInputType)
+import Begumpura.Press.Schema.Generated.Enum.LocaleInputType (LocaleInputType)
 import Begumpura.Press.Schema.Generated.Enum.PostStatus (PostStatus)
 import Begumpura.Press.Schema.Generated.Enum.PostStatusInput (PostStatusInput)
+import Begumpura.Press.Schema.Generated.Enum.PayloadPreferenceUserRelationTo (PayloadPreferenceUserRelationTo)
+import Begumpura.Press.Schema.Generated.Enum.PayloadPreferenceUserRelationRelationTo (PayloadPreferenceUserRelationRelationTo)
 import Begumpura.Press.Schema.Generated.Enum.PostStatusMutationInput (PostStatusMutationInput)
 import Begumpura.Press.Schema.Generated.Enum.PostUpdateStatusMutationInput (PostUpdateStatusMutationInput)
+import Begumpura.Press.Schema.Generated.Enum.PayloadPreferenceUserRelationshipInputRelationTo (PayloadPreferenceUserRelationshipInputRelationTo)
+import Begumpura.Press.Schema.Generated.Enum.PayloadPreferenceUpdateUserRelationshipInputRelationTo (PayloadPreferenceUpdateUserRelationshipInputRelationTo)
 
 
 import Data.Argonaut.Core as Data.Argonaut.Core
@@ -23,17 +27,17 @@ newtype Query = Query
   { "Category" :: 
     { id :: (NotNull String)
     , draft :: Boolean
-    , locale :: LocaleInputType
     , fallbackLocale :: FallbackLocaleInputType
+    , locale :: LocaleInputType
     }
     -> (Maybe Category)
   , "Categories" :: 
-    { where :: CategoryWhere
-    , draft :: Boolean
-    , locale :: LocaleInputType
+    { draft :: Boolean
+    , where :: CategoryWhere
     , fallbackLocale :: FallbackLocaleInputType
-    , page :: Int
+    , locale :: LocaleInputType
     , limit :: Int
+    , page :: Int
     , sort :: String
     }
     -> (Maybe Categories)
@@ -44,17 +48,17 @@ newtype Query = Query
   , "Post" :: 
     { id :: (NotNull String)
     , draft :: Boolean
-    , locale :: LocaleInputType
     , fallbackLocale :: FallbackLocaleInputType
+    , locale :: LocaleInputType
     }
     -> (Maybe Post)
   , "Posts" :: 
-    { where :: PostWhere
-    , draft :: Boolean
-    , locale :: LocaleInputType
+    { draft :: Boolean
+    , where :: PostWhere
     , fallbackLocale :: FallbackLocaleInputType
-    , page :: Int
+    , locale :: LocaleInputType
     , limit :: Int
+    , page :: Int
     , sort :: String
     }
     -> (Maybe Posts)
@@ -65,17 +69,17 @@ newtype Query = Query
   , "Tag" :: 
     { id :: (NotNull String)
     , draft :: Boolean
-    , locale :: LocaleInputType
     , fallbackLocale :: FallbackLocaleInputType
+    , locale :: LocaleInputType
     }
     -> (Maybe Tag)
   , "Tags" :: 
-    { where :: TagWhere
-    , draft :: Boolean
-    , locale :: LocaleInputType
+    { draft :: Boolean
+    , where :: TagWhere
     , fallbackLocale :: FallbackLocaleInputType
-    , page :: Int
+    , locale :: LocaleInputType
     , limit :: Int
+    , page :: Int
     , sort :: String
     }
     -> (Maybe Tags)
@@ -86,17 +90,17 @@ newtype Query = Query
   , "User" :: 
     { id :: (NotNull String)
     , draft :: Boolean
-    , locale :: LocaleInputType
     , fallbackLocale :: FallbackLocaleInputType
+    , locale :: LocaleInputType
     }
     -> (Maybe User)
   , "Users" :: 
-    { where :: UserWhere
-    , draft :: Boolean
-    , locale :: LocaleInputType
+    { draft :: Boolean
+    , where :: UserWhere
     , fallbackLocale :: FallbackLocaleInputType
-    , page :: Int
+    , locale :: LocaleInputType
     , limit :: Int
+    , page :: Int
     , sort :: String
     }
     -> (Maybe Users)
@@ -115,17 +119,17 @@ newtype Query = Query
   , "Media" :: 
     { id :: (NotNull String)
     , draft :: Boolean
-    , locale :: LocaleInputType
     , fallbackLocale :: FallbackLocaleInputType
+    , locale :: LocaleInputType
     }
     -> (Maybe Media)
   , allMedia :: 
-    { where :: MediaWhere
-    , draft :: Boolean
-    , locale :: LocaleInputType
+    { draft :: Boolean
+    , where :: MediaWhere
     , fallbackLocale :: FallbackLocaleInputType
-    , page :: Int
+    , locale :: LocaleInputType
     , limit :: Int
+    , page :: Int
     , sort :: String
     }
     -> (Maybe AllMedia)
@@ -133,10 +137,27 @@ newtype Query = Query
     { id :: (NotNull String)
     }
     -> (Maybe MediaDocAccess)
-  , "Preference" :: 
-    { key :: String
+  , "PayloadPreference" :: 
+    { id :: (NotNull String)
+    , draft :: Boolean
+    , fallbackLocale :: FallbackLocaleInputType
+    , locale :: LocaleInputType
     }
-    -> (Maybe Preference)
+    -> (Maybe PayloadPreference)
+  , "PayloadPreferences" :: 
+    { draft :: Boolean
+    , where :: PayloadPreferenceWhere
+    , fallbackLocale :: FallbackLocaleInputType
+    , locale :: LocaleInputType
+    , limit :: Int
+    , page :: Int
+    , sort :: String
+    }
+    -> (Maybe PayloadPreferences)
+  , docAccessPayloadPreference :: 
+    { id :: (NotNull String)
+    }
+    -> (Maybe PayloadPreferencesDocAccess)
   , "Access" :: 
     { 
     }
@@ -163,19 +184,23 @@ newtype Categories = Categories
     { 
     }
     -> (Maybe (Array (Maybe Category)))
-  , totalDocs :: 
+  , hasNextPage :: 
     { 
     }
-    -> (Maybe Int)
-  , offset :: 
+    -> (Maybe Boolean)
+  , hasPrevPage :: 
     { 
     }
-    -> (Maybe Int)
+    -> (Maybe Boolean)
   , limit :: 
     { 
     }
     -> (Maybe Int)
-  , totalPages :: 
+  , nextPage :: 
+    { 
+    }
+    -> (Maybe Int)
+  , offset :: 
     { 
     }
     -> (Maybe Int)
@@ -187,19 +212,15 @@ newtype Categories = Categories
     { 
     }
     -> (Maybe Int)
-  , hasPrevPage :: 
-    { 
-    }
-    -> (Maybe Boolean)
-  , hasNextPage :: 
-    { 
-    }
-    -> (Maybe Boolean)
   , prevPage :: 
     { 
     }
     -> (Maybe Int)
-  , nextPage :: 
+  , totalDocs :: 
+    { 
+    }
+    -> (Maybe Int)
+  , totalPages :: 
     { 
     }
     -> (Maybe Int)
@@ -209,8 +230,8 @@ derive instance newtypeCategories :: Newtype Categories _
 newtype CategoryWhere = CategoryWhere
   { name :: CategoryNameOperator
   , id :: CategoryIdOperator
-  , "OR" :: (Array CategoryWhereOr)
   , "AND" :: (Array CategoryWhereAnd)
+  , "OR" :: (Array CategoryWhereOr)
   }
 derive instance newtypeCategoryWhere :: Newtype CategoryWhere _
 
@@ -238,17 +259,17 @@ newtype CategoryIdOperator = CategoryIdOperator
   }
 derive instance newtypeCategoryIdOperator :: Newtype CategoryIdOperator _
 
-newtype CategoryWhereOr = CategoryWhereOr
-  { name :: CategoryNameOperator
-  , id :: CategoryIdOperator
-  }
-derive instance newtypeCategoryWhereOr :: Newtype CategoryWhereOr _
-
 newtype CategoryWhereAnd = CategoryWhereAnd
   { name :: CategoryNameOperator
   , id :: CategoryIdOperator
   }
 derive instance newtypeCategoryWhereAnd :: Newtype CategoryWhereAnd _
+
+newtype CategoryWhereOr = CategoryWhereOr
+  { name :: CategoryNameOperator
+  , id :: CategoryIdOperator
+  }
+derive instance newtypeCategoryWhereOr :: Newtype CategoryWhereOr _
 
 newtype CategoriesDocAccess = CategoriesDocAccess
   { fields :: 
@@ -399,12 +420,12 @@ newtype Post = Post
     { locale :: LocaleInputType
     , fallbackLocale :: FallbackLocaleInputType
     }
-    -> (Maybe User)
+    -> (Maybe (Array User))
   , translator :: 
     { locale :: LocaleInputType
     , fallbackLocale :: FallbackLocaleInputType
     }
-    -> (Maybe User)
+    -> (Maybe (Array User))
   , publishedDate :: 
     { 
     }
@@ -519,19 +540,23 @@ newtype Posts = Posts
     { 
     }
     -> (Maybe (Array (Maybe Post)))
-  , totalDocs :: 
+  , hasNextPage :: 
     { 
     }
-    -> (Maybe Int)
-  , offset :: 
+    -> (Maybe Boolean)
+  , hasPrevPage :: 
     { 
     }
-    -> (Maybe Int)
+    -> (Maybe Boolean)
   , limit :: 
     { 
     }
     -> (Maybe Int)
-  , totalPages :: 
+  , nextPage :: 
+    { 
+    }
+    -> (Maybe Int)
+  , offset :: 
     { 
     }
     -> (Maybe Int)
@@ -543,19 +568,15 @@ newtype Posts = Posts
     { 
     }
     -> (Maybe Int)
-  , hasPrevPage :: 
-    { 
-    }
-    -> (Maybe Boolean)
-  , hasNextPage :: 
-    { 
-    }
-    -> (Maybe Boolean)
   , prevPage :: 
     { 
     }
     -> (Maybe Int)
-  , nextPage :: 
+  , totalDocs :: 
+    { 
+    }
+    -> (Maybe Int)
+  , totalPages :: 
     { 
     }
     -> (Maybe Int)
@@ -574,8 +595,8 @@ newtype PostWhere = PostWhere
   , updatedAt :: PostUpdatedAtOperator
   , createdAt :: PostCreatedAtOperator
   , id :: PostIdOperator
-  , "OR" :: (Array PostWhereOr)
   , "AND" :: (Array PostWhereAnd)
+  , "OR" :: (Array PostWhereOr)
   }
 derive instance newtypePostWhere :: Newtype PostWhere _
 
@@ -592,21 +613,21 @@ newtype PostTitleOperator = PostTitleOperator
 derive instance newtypePostTitleOperator :: Newtype PostTitleOperator _
 
 newtype PostAuthorOperator = PostAuthorOperator
-  { equals :: String
-  , not_equals :: String
-  , in :: (Array String)
-  , not_in :: (Array String)
-  , all :: (Array String)
+  { equals :: Json
+  , not_equals :: Json
+  , in :: (Array Json)
+  , not_in :: (Array Json)
+  , all :: (Array Json)
   , exists :: Boolean
   }
 derive instance newtypePostAuthorOperator :: Newtype PostAuthorOperator _
 
 newtype PostTranslatorOperator = PostTranslatorOperator
-  { equals :: String
-  , not_equals :: String
-  , in :: (Array String)
-  , not_in :: (Array String)
-  , all :: (Array String)
+  { equals :: Json
+  , not_equals :: Json
+  , in :: (Array Json)
+  , not_in :: (Array Json)
+  , all :: (Array Json)
   , exists :: Boolean
   }
 derive instance newtypePostTranslatorOperator :: Newtype PostTranslatorOperator _
@@ -624,21 +645,21 @@ newtype PostPublishedDateOperator = PostPublishedDateOperator
 derive instance newtypePostPublishedDateOperator :: Newtype PostPublishedDateOperator _
 
 newtype PostCategoryOperator = PostCategoryOperator
-  { equals :: String
-  , not_equals :: String
-  , in :: (Array String)
-  , not_in :: (Array String)
-  , all :: (Array String)
+  { equals :: Json
+  , not_equals :: Json
+  , in :: (Array Json)
+  , not_in :: (Array Json)
+  , all :: (Array Json)
   , exists :: Boolean
   }
 derive instance newtypePostCategoryOperator :: Newtype PostCategoryOperator _
 
 newtype PostTagsOperator = PostTagsOperator
-  { equals :: String
-  , not_equals :: String
-  , in :: (Array String)
-  , not_in :: (Array String)
-  , all :: (Array String)
+  { equals :: Json
+  , not_equals :: Json
+  , in :: (Array Json)
+  , not_in :: (Array Json)
+  , all :: (Array Json)
   , exists :: Boolean
   }
 derive instance newtypePostTagsOperator :: Newtype PostTagsOperator _
@@ -698,21 +719,6 @@ newtype PostIdOperator = PostIdOperator
   }
 derive instance newtypePostIdOperator :: Newtype PostIdOperator _
 
-newtype PostWhereOr = PostWhereOr
-  { title :: PostTitleOperator
-  , author :: PostAuthorOperator
-  , translator :: PostTranslatorOperator
-  , publishedDate :: PostPublishedDateOperator
-  , category :: PostCategoryOperator
-  , tags :: PostTagsOperator
-  , content :: PostContentOperator
-  , status :: PostStatusOperator
-  , updatedAt :: PostUpdatedAtOperator
-  , createdAt :: PostCreatedAtOperator
-  , id :: PostIdOperator
-  }
-derive instance newtypePostWhereOr :: Newtype PostWhereOr _
-
 newtype PostWhereAnd = PostWhereAnd
   { title :: PostTitleOperator
   , author :: PostAuthorOperator
@@ -727,6 +733,21 @@ newtype PostWhereAnd = PostWhereAnd
   , id :: PostIdOperator
   }
 derive instance newtypePostWhereAnd :: Newtype PostWhereAnd _
+
+newtype PostWhereOr = PostWhereOr
+  { title :: PostTitleOperator
+  , author :: PostAuthorOperator
+  , translator :: PostTranslatorOperator
+  , publishedDate :: PostPublishedDateOperator
+  , category :: PostCategoryOperator
+  , tags :: PostTagsOperator
+  , content :: PostContentOperator
+  , status :: PostStatusOperator
+  , updatedAt :: PostUpdatedAtOperator
+  , createdAt :: PostCreatedAtOperator
+  , id :: PostIdOperator
+  }
+derive instance newtypePostWhereOr :: Newtype PostWhereOr _
 
 newtype PostsDocAccess = PostsDocAccess
   { fields :: 
@@ -1369,19 +1390,23 @@ newtype Tags = Tags
     { 
     }
     -> (Maybe (Array (Maybe Tag)))
-  , totalDocs :: 
+  , hasNextPage :: 
     { 
     }
-    -> (Maybe Int)
-  , offset :: 
+    -> (Maybe Boolean)
+  , hasPrevPage :: 
     { 
     }
-    -> (Maybe Int)
+    -> (Maybe Boolean)
   , limit :: 
     { 
     }
     -> (Maybe Int)
-  , totalPages :: 
+  , nextPage :: 
+    { 
+    }
+    -> (Maybe Int)
+  , offset :: 
     { 
     }
     -> (Maybe Int)
@@ -1393,19 +1418,15 @@ newtype Tags = Tags
     { 
     }
     -> (Maybe Int)
-  , hasPrevPage :: 
-    { 
-    }
-    -> (Maybe Boolean)
-  , hasNextPage :: 
-    { 
-    }
-    -> (Maybe Boolean)
   , prevPage :: 
     { 
     }
     -> (Maybe Int)
-  , nextPage :: 
+  , totalDocs :: 
+    { 
+    }
+    -> (Maybe Int)
+  , totalPages :: 
     { 
     }
     -> (Maybe Int)
@@ -1415,8 +1436,8 @@ derive instance newtypeTags :: Newtype Tags _
 newtype TagWhere = TagWhere
   { name :: TagNameOperator
   , id :: TagIdOperator
-  , "OR" :: (Array TagWhereOr)
   , "AND" :: (Array TagWhereAnd)
+  , "OR" :: (Array TagWhereOr)
   }
 derive instance newtypeTagWhere :: Newtype TagWhere _
 
@@ -1444,17 +1465,17 @@ newtype TagIdOperator = TagIdOperator
   }
 derive instance newtypeTagIdOperator :: Newtype TagIdOperator _
 
-newtype TagWhereOr = TagWhereOr
-  { name :: TagNameOperator
-  , id :: TagIdOperator
-  }
-derive instance newtypeTagWhereOr :: Newtype TagWhereOr _
-
 newtype TagWhereAnd = TagWhereAnd
   { name :: TagNameOperator
   , id :: TagIdOperator
   }
 derive instance newtypeTagWhereAnd :: Newtype TagWhereAnd _
+
+newtype TagWhereOr = TagWhereOr
+  { name :: TagNameOperator
+  , id :: TagIdOperator
+  }
+derive instance newtypeTagWhereOr :: Newtype TagWhereOr _
 
 newtype TagsDocAccess = TagsDocAccess
   { fields :: 
@@ -1593,19 +1614,23 @@ newtype Users = Users
     { 
     }
     -> (Maybe (Array (Maybe User)))
-  , totalDocs :: 
+  , hasNextPage :: 
     { 
     }
-    -> (Maybe Int)
-  , offset :: 
+    -> (Maybe Boolean)
+  , hasPrevPage :: 
     { 
     }
-    -> (Maybe Int)
+    -> (Maybe Boolean)
   , limit :: 
     { 
     }
     -> (Maybe Int)
-  , totalPages :: 
+  , nextPage :: 
+    { 
+    }
+    -> (Maybe Int)
+  , offset :: 
     { 
     }
     -> (Maybe Int)
@@ -1617,19 +1642,15 @@ newtype Users = Users
     { 
     }
     -> (Maybe Int)
-  , hasPrevPage :: 
-    { 
-    }
-    -> (Maybe Boolean)
-  , hasNextPage :: 
-    { 
-    }
-    -> (Maybe Boolean)
   , prevPage :: 
     { 
     }
     -> (Maybe Int)
-  , nextPage :: 
+  , totalDocs :: 
+    { 
+    }
+    -> (Maybe Int)
+  , totalPages :: 
     { 
     }
     -> (Maybe Int)
@@ -1642,8 +1663,8 @@ newtype UserWhere = UserWhere
   , createdAt :: UserCreatedAtOperator
   , email :: UserEmailOperator
   , id :: UserIdOperator
-  , "OR" :: (Array UserWhereOr)
   , "AND" :: (Array UserWhereAnd)
+  , "OR" :: (Array UserWhereOr)
   }
 derive instance newtypeUserWhere :: Newtype UserWhere _
 
@@ -1706,15 +1727,6 @@ newtype UserIdOperator = UserIdOperator
   }
 derive instance newtypeUserIdOperator :: Newtype UserIdOperator _
 
-newtype UserWhereOr = UserWhereOr
-  { name :: UserNameOperator
-  , updatedAt :: UserUpdatedAtOperator
-  , createdAt :: UserCreatedAtOperator
-  , email :: UserEmailOperator
-  , id :: UserIdOperator
-  }
-derive instance newtypeUserWhereOr :: Newtype UserWhereOr _
-
 newtype UserWhereAnd = UserWhereAnd
   { name :: UserNameOperator
   , updatedAt :: UserUpdatedAtOperator
@@ -1723,6 +1735,15 @@ newtype UserWhereAnd = UserWhereAnd
   , id :: UserIdOperator
   }
 derive instance newtypeUserWhereAnd :: Newtype UserWhereAnd _
+
+newtype UserWhereOr = UserWhereOr
+  { name :: UserNameOperator
+  , updatedAt :: UserUpdatedAtOperator
+  , createdAt :: UserCreatedAtOperator
+  , email :: UserEmailOperator
+  , id :: UserIdOperator
+  }
+derive instance newtypeUserWhereOr :: Newtype UserWhereOr _
 
 newtype UsersDocAccess = UsersDocAccess
   { fields :: 
@@ -2097,7 +2118,15 @@ newtype UsersUnlockDocAccess = UsersUnlockDocAccess
 derive instance newtypeUsersUnlockDocAccess :: Newtype UsersUnlockDocAccess _
 
 newtype UsersMe = UsersMe
-  { token :: 
+  { collection :: 
+    { 
+    }
+    -> (Maybe String)
+  , exp :: 
+    { 
+    }
+    -> (Maybe Int)
+  , token :: 
     { 
     }
     -> (Maybe String)
@@ -2105,14 +2134,6 @@ newtype UsersMe = UsersMe
     { 
     }
     -> (Maybe User)
-  , exp :: 
-    { 
-    }
-    -> (Maybe Int)
-  , collection :: 
-    { 
-    }
-    -> (Maybe String)
   }
 derive instance newtypeUsersMe :: Newtype UsersMe _
 
@@ -2233,19 +2254,23 @@ newtype AllMedia = AllMedia
     { 
     }
     -> (Maybe (Array (Maybe Media)))
-  , totalDocs :: 
+  , hasNextPage :: 
     { 
     }
-    -> (Maybe Int)
-  , offset :: 
+    -> (Maybe Boolean)
+  , hasPrevPage :: 
     { 
     }
-    -> (Maybe Int)
+    -> (Maybe Boolean)
   , limit :: 
     { 
     }
     -> (Maybe Int)
-  , totalPages :: 
+  , nextPage :: 
+    { 
+    }
+    -> (Maybe Int)
+  , offset :: 
     { 
     }
     -> (Maybe Int)
@@ -2257,19 +2282,15 @@ newtype AllMedia = AllMedia
     { 
     }
     -> (Maybe Int)
-  , hasPrevPage :: 
-    { 
-    }
-    -> (Maybe Boolean)
-  , hasNextPage :: 
-    { 
-    }
-    -> (Maybe Boolean)
   , prevPage :: 
     { 
     }
     -> (Maybe Int)
-  , nextPage :: 
+  , totalDocs :: 
+    { 
+    }
+    -> (Maybe Int)
+  , totalPages :: 
     { 
     }
     -> (Maybe Int)
@@ -2298,8 +2319,8 @@ newtype MediaWhere = MediaWhere
   , sizes__sixteenByNineMedium__filesize :: MediaSizesSixteenByNineMediumFilesizeOperator
   , sizes__sixteenByNineMedium__filename :: MediaSizesSixteenByNineMediumFilenameOperator
   , id :: MediaIdOperator
-  , "OR" :: (Array MediaWhereOr)
   , "AND" :: (Array MediaWhereAnd)
+  , "OR" :: (Array MediaWhereOr)
   }
 derive instance newtypeMediaWhere :: Newtype MediaWhere _
 
@@ -2546,31 +2567,6 @@ newtype MediaIdOperator = MediaIdOperator
   }
 derive instance newtypeMediaIdOperator :: Newtype MediaIdOperator _
 
-newtype MediaWhereOr = MediaWhereOr
-  { updatedAt :: MediaUpdatedAtOperator
-  , createdAt :: MediaCreatedAtOperator
-  , url :: MediaUrlOperator
-  , filename :: MediaFilenameOperator
-  , mimeType :: MediaMimeTypeOperator
-  , filesize :: MediaFilesizeOperator
-  , width :: MediaWidthOperator
-  , height :: MediaHeightOperator
-  , sizes__thumbnail__url :: MediaSizesThumbnailUrlOperator
-  , sizes__thumbnail__width :: MediaSizesThumbnailWidthOperator
-  , sizes__thumbnail__height :: MediaSizesThumbnailHeightOperator
-  , sizes__thumbnail__mimeType :: MediaSizesThumbnailMimeTypeOperator
-  , sizes__thumbnail__filesize :: MediaSizesThumbnailFilesizeOperator
-  , sizes__thumbnail__filename :: MediaSizesThumbnailFilenameOperator
-  , sizes__sixteenByNineMedium__url :: MediaSizesSixteenByNineMediumUrlOperator
-  , sizes__sixteenByNineMedium__width :: MediaSizesSixteenByNineMediumWidthOperator
-  , sizes__sixteenByNineMedium__height :: MediaSizesSixteenByNineMediumHeightOperator
-  , sizes__sixteenByNineMedium__mimeType :: MediaSizesSixteenByNineMediumMimeTypeOperator
-  , sizes__sixteenByNineMedium__filesize :: MediaSizesSixteenByNineMediumFilesizeOperator
-  , sizes__sixteenByNineMedium__filename :: MediaSizesSixteenByNineMediumFilenameOperator
-  , id :: MediaIdOperator
-  }
-derive instance newtypeMediaWhereOr :: Newtype MediaWhereOr _
-
 newtype MediaWhereAnd = MediaWhereAnd
   { updatedAt :: MediaUpdatedAtOperator
   , createdAt :: MediaCreatedAtOperator
@@ -2595,6 +2591,31 @@ newtype MediaWhereAnd = MediaWhereAnd
   , id :: MediaIdOperator
   }
 derive instance newtypeMediaWhereAnd :: Newtype MediaWhereAnd _
+
+newtype MediaWhereOr = MediaWhereOr
+  { updatedAt :: MediaUpdatedAtOperator
+  , createdAt :: MediaCreatedAtOperator
+  , url :: MediaUrlOperator
+  , filename :: MediaFilenameOperator
+  , mimeType :: MediaMimeTypeOperator
+  , filesize :: MediaFilesizeOperator
+  , width :: MediaWidthOperator
+  , height :: MediaHeightOperator
+  , sizes__thumbnail__url :: MediaSizesThumbnailUrlOperator
+  , sizes__thumbnail__width :: MediaSizesThumbnailWidthOperator
+  , sizes__thumbnail__height :: MediaSizesThumbnailHeightOperator
+  , sizes__thumbnail__mimeType :: MediaSizesThumbnailMimeTypeOperator
+  , sizes__thumbnail__filesize :: MediaSizesThumbnailFilesizeOperator
+  , sizes__thumbnail__filename :: MediaSizesThumbnailFilenameOperator
+  , sizes__sixteenByNineMedium__url :: MediaSizesSixteenByNineMediumUrlOperator
+  , sizes__sixteenByNineMedium__width :: MediaSizesSixteenByNineMediumWidthOperator
+  , sizes__sixteenByNineMedium__height :: MediaSizesSixteenByNineMediumHeightOperator
+  , sizes__sixteenByNineMedium__mimeType :: MediaSizesSixteenByNineMediumMimeTypeOperator
+  , sizes__sixteenByNineMedium__filesize :: MediaSizesSixteenByNineMediumFilesizeOperator
+  , sizes__sixteenByNineMedium__filename :: MediaSizesSixteenByNineMediumFilenameOperator
+  , id :: MediaIdOperator
+  }
+derive instance newtypeMediaWhereOr :: Newtype MediaWhereOr _
 
 newtype MediaDocAccess = MediaDocAccess
   { fields :: 
@@ -3984,25 +4005,551 @@ newtype MediaDeleteDocAccess = MediaDeleteDocAccess
   }
 derive instance newtypeMediaDeleteDocAccess :: Newtype MediaDeleteDocAccess _
 
-newtype Preference = Preference
-  { key :: 
+newtype PayloadPreference = PayloadPreference
+  { id :: 
     { 
     }
-    -> String
+    -> (Maybe String)
+  , user :: 
+    { locale :: LocaleInputType
+    , fallbackLocale :: FallbackLocaleInputType
+    }
+    -> PayloadPreferenceUserRelationship
+  , key :: 
+    { 
+    }
+    -> (Maybe String)
   , value :: 
     { 
     }
     -> (Maybe Json)
-  , createdAt :: 
-    { 
-    }
-    -> DateTime
   , updatedAt :: 
     { 
     }
-    -> DateTime
+    -> (Maybe DateTime)
+  , createdAt :: 
+    { 
+    }
+    -> (Maybe DateTime)
   }
-derive instance newtypePreference :: Newtype Preference _
+derive instance newtypePayloadPreference :: Newtype PayloadPreference _
+
+newtype PayloadPreferenceUserRelationship = PayloadPreferenceUserRelationship
+  { relationTo :: 
+    { 
+    }
+    -> (Maybe PayloadPreferenceUserRelationTo)
+  , value :: 
+    { 
+    }
+    -> (Maybe PayloadPreference_User)
+  }
+derive instance newtypePayloadPreferenceUserRelationship :: Newtype PayloadPreferenceUserRelationship _
+
+type PayloadPreference_User = GqlUnion
+  ( "User" :: User
+  )
+
+newtype PayloadPreferences = PayloadPreferences
+  { docs :: 
+    { 
+    }
+    -> (Maybe (Array (Maybe PayloadPreference)))
+  , hasNextPage :: 
+    { 
+    }
+    -> (Maybe Boolean)
+  , hasPrevPage :: 
+    { 
+    }
+    -> (Maybe Boolean)
+  , limit :: 
+    { 
+    }
+    -> (Maybe Int)
+  , nextPage :: 
+    { 
+    }
+    -> (Maybe Int)
+  , offset :: 
+    { 
+    }
+    -> (Maybe Int)
+  , page :: 
+    { 
+    }
+    -> (Maybe Int)
+  , pagingCounter :: 
+    { 
+    }
+    -> (Maybe Int)
+  , prevPage :: 
+    { 
+    }
+    -> (Maybe Int)
+  , totalDocs :: 
+    { 
+    }
+    -> (Maybe Int)
+  , totalPages :: 
+    { 
+    }
+    -> (Maybe Int)
+  }
+derive instance newtypePayloadPreferences :: Newtype PayloadPreferences _
+
+newtype PayloadPreferenceWhere = PayloadPreferenceWhere
+  { user :: PayloadPreferenceUserRelation
+  , key :: PayloadPreferenceKeyOperator
+  , value :: PayloadPreferenceValueOperator
+  , updatedAt :: PayloadPreferenceUpdatedAtOperator
+  , createdAt :: PayloadPreferenceCreatedAtOperator
+  , id :: PayloadPreferenceIdOperator
+  , "AND" :: (Array PayloadPreferenceWhereAnd)
+  , "OR" :: (Array PayloadPreferenceWhereOr)
+  }
+derive instance newtypePayloadPreferenceWhere :: Newtype PayloadPreferenceWhere _
+
+newtype PayloadPreferenceUserRelation = PayloadPreferenceUserRelation
+  { relationTo :: PayloadPreferenceUserRelationRelationTo
+  , value :: Json
+  }
+derive instance newtypePayloadPreferenceUserRelation :: Newtype PayloadPreferenceUserRelation _
+
+newtype PayloadPreferenceKeyOperator = PayloadPreferenceKeyOperator
+  { equals :: String
+  , not_equals :: String
+  , like :: String
+  , contains :: String
+  , in :: (Array String)
+  , not_in :: (Array String)
+  , all :: (Array String)
+  , exists :: Boolean
+  }
+derive instance newtypePayloadPreferenceKeyOperator :: Newtype PayloadPreferenceKeyOperator _
+
+newtype PayloadPreferenceValueOperator = PayloadPreferenceValueOperator
+  { equals :: Json
+  , not_equals :: Json
+  , like :: Json
+  , contains :: Json
+  , within :: Json
+  , intersects :: Json
+  , exists :: Boolean
+  }
+derive instance newtypePayloadPreferenceValueOperator :: Newtype PayloadPreferenceValueOperator _
+
+newtype PayloadPreferenceUpdatedAtOperator = PayloadPreferenceUpdatedAtOperator
+  { equals :: DateTime
+  , not_equals :: DateTime
+  , greater_than_equal :: DateTime
+  , greater_than :: DateTime
+  , less_than_equal :: DateTime
+  , less_than :: DateTime
+  , like :: DateTime
+  , exists :: Boolean
+  }
+derive instance newtypePayloadPreferenceUpdatedAtOperator :: Newtype PayloadPreferenceUpdatedAtOperator _
+
+newtype PayloadPreferenceCreatedAtOperator = PayloadPreferenceCreatedAtOperator
+  { equals :: DateTime
+  , not_equals :: DateTime
+  , greater_than_equal :: DateTime
+  , greater_than :: DateTime
+  , less_than_equal :: DateTime
+  , less_than :: DateTime
+  , like :: DateTime
+  , exists :: Boolean
+  }
+derive instance newtypePayloadPreferenceCreatedAtOperator :: Newtype PayloadPreferenceCreatedAtOperator _
+
+newtype PayloadPreferenceIdOperator = PayloadPreferenceIdOperator
+  { equals :: String
+  , not_equals :: String
+  , like :: String
+  , contains :: String
+  , in :: (Array String)
+  , not_in :: (Array String)
+  , all :: (Array String)
+  , exists :: Boolean
+  }
+derive instance newtypePayloadPreferenceIdOperator :: Newtype PayloadPreferenceIdOperator _
+
+newtype PayloadPreferenceWhereAnd = PayloadPreferenceWhereAnd
+  { user :: PayloadPreferenceUserRelation
+  , key :: PayloadPreferenceKeyOperator
+  , value :: PayloadPreferenceValueOperator
+  , updatedAt :: PayloadPreferenceUpdatedAtOperator
+  , createdAt :: PayloadPreferenceCreatedAtOperator
+  , id :: PayloadPreferenceIdOperator
+  }
+derive instance newtypePayloadPreferenceWhereAnd :: Newtype PayloadPreferenceWhereAnd _
+
+newtype PayloadPreferenceWhereOr = PayloadPreferenceWhereOr
+  { user :: PayloadPreferenceUserRelation
+  , key :: PayloadPreferenceKeyOperator
+  , value :: PayloadPreferenceValueOperator
+  , updatedAt :: PayloadPreferenceUpdatedAtOperator
+  , createdAt :: PayloadPreferenceCreatedAtOperator
+  , id :: PayloadPreferenceIdOperator
+  }
+derive instance newtypePayloadPreferenceWhereOr :: Newtype PayloadPreferenceWhereOr _
+
+newtype PayloadPreferencesDocAccess = PayloadPreferencesDocAccess
+  { fields :: 
+    { 
+    }
+    -> (Maybe PayloadPreferencesDocAccessFields)
+  , create :: 
+    { 
+    }
+    -> (Maybe PayloadPreferencesCreateDocAccess)
+  , read :: 
+    { 
+    }
+    -> (Maybe PayloadPreferencesReadDocAccess)
+  , update :: 
+    { 
+    }
+    -> (Maybe PayloadPreferencesUpdateDocAccess)
+  , delete :: 
+    { 
+    }
+    -> (Maybe PayloadPreferencesDeleteDocAccess)
+  }
+derive instance newtypePayloadPreferencesDocAccess :: Newtype PayloadPreferencesDocAccess _
+
+newtype PayloadPreferencesDocAccessFields = PayloadPreferencesDocAccessFields
+  { user :: 
+    { 
+    }
+    -> (Maybe PayloadPreferencesDocAccessFieldsUser)
+  , key :: 
+    { 
+    }
+    -> (Maybe PayloadPreferencesDocAccessFieldsKey)
+  , value :: 
+    { 
+    }
+    -> (Maybe PayloadPreferencesDocAccessFieldsValue)
+  , updatedAt :: 
+    { 
+    }
+    -> (Maybe PayloadPreferencesDocAccessFieldsUpdatedAt)
+  , createdAt :: 
+    { 
+    }
+    -> (Maybe PayloadPreferencesDocAccessFieldsCreatedAt)
+  }
+derive instance newtypePayloadPreferencesDocAccessFields :: Newtype PayloadPreferencesDocAccessFields _
+
+newtype PayloadPreferencesDocAccessFieldsUser = PayloadPreferencesDocAccessFieldsUser
+  { create :: 
+    { 
+    }
+    -> (Maybe PayloadPreferencesDocAccessFieldsUserCreate)
+  , read :: 
+    { 
+    }
+    -> (Maybe PayloadPreferencesDocAccessFieldsUserRead)
+  , update :: 
+    { 
+    }
+    -> (Maybe PayloadPreferencesDocAccessFieldsUserUpdate)
+  , delete :: 
+    { 
+    }
+    -> (Maybe PayloadPreferencesDocAccessFieldsUserDelete)
+  }
+derive instance newtypePayloadPreferencesDocAccessFieldsUser :: Newtype PayloadPreferencesDocAccessFieldsUser _
+
+newtype PayloadPreferencesDocAccessFieldsUserCreate = PayloadPreferencesDocAccessFieldsUserCreate
+  { permission :: 
+    { 
+    }
+    -> Boolean
+  }
+derive instance newtypePayloadPreferencesDocAccessFieldsUserCreate :: Newtype PayloadPreferencesDocAccessFieldsUserCreate _
+
+newtype PayloadPreferencesDocAccessFieldsUserRead = PayloadPreferencesDocAccessFieldsUserRead
+  { permission :: 
+    { 
+    }
+    -> Boolean
+  }
+derive instance newtypePayloadPreferencesDocAccessFieldsUserRead :: Newtype PayloadPreferencesDocAccessFieldsUserRead _
+
+newtype PayloadPreferencesDocAccessFieldsUserUpdate = PayloadPreferencesDocAccessFieldsUserUpdate
+  { permission :: 
+    { 
+    }
+    -> Boolean
+  }
+derive instance newtypePayloadPreferencesDocAccessFieldsUserUpdate :: Newtype PayloadPreferencesDocAccessFieldsUserUpdate _
+
+newtype PayloadPreferencesDocAccessFieldsUserDelete = PayloadPreferencesDocAccessFieldsUserDelete
+  { permission :: 
+    { 
+    }
+    -> Boolean
+  }
+derive instance newtypePayloadPreferencesDocAccessFieldsUserDelete :: Newtype PayloadPreferencesDocAccessFieldsUserDelete _
+
+newtype PayloadPreferencesDocAccessFieldsKey = PayloadPreferencesDocAccessFieldsKey
+  { create :: 
+    { 
+    }
+    -> (Maybe PayloadPreferencesDocAccessFieldsKeyCreate)
+  , read :: 
+    { 
+    }
+    -> (Maybe PayloadPreferencesDocAccessFieldsKeyRead)
+  , update :: 
+    { 
+    }
+    -> (Maybe PayloadPreferencesDocAccessFieldsKeyUpdate)
+  , delete :: 
+    { 
+    }
+    -> (Maybe PayloadPreferencesDocAccessFieldsKeyDelete)
+  }
+derive instance newtypePayloadPreferencesDocAccessFieldsKey :: Newtype PayloadPreferencesDocAccessFieldsKey _
+
+newtype PayloadPreferencesDocAccessFieldsKeyCreate = PayloadPreferencesDocAccessFieldsKeyCreate
+  { permission :: 
+    { 
+    }
+    -> Boolean
+  }
+derive instance newtypePayloadPreferencesDocAccessFieldsKeyCreate :: Newtype PayloadPreferencesDocAccessFieldsKeyCreate _
+
+newtype PayloadPreferencesDocAccessFieldsKeyRead = PayloadPreferencesDocAccessFieldsKeyRead
+  { permission :: 
+    { 
+    }
+    -> Boolean
+  }
+derive instance newtypePayloadPreferencesDocAccessFieldsKeyRead :: Newtype PayloadPreferencesDocAccessFieldsKeyRead _
+
+newtype PayloadPreferencesDocAccessFieldsKeyUpdate = PayloadPreferencesDocAccessFieldsKeyUpdate
+  { permission :: 
+    { 
+    }
+    -> Boolean
+  }
+derive instance newtypePayloadPreferencesDocAccessFieldsKeyUpdate :: Newtype PayloadPreferencesDocAccessFieldsKeyUpdate _
+
+newtype PayloadPreferencesDocAccessFieldsKeyDelete = PayloadPreferencesDocAccessFieldsKeyDelete
+  { permission :: 
+    { 
+    }
+    -> Boolean
+  }
+derive instance newtypePayloadPreferencesDocAccessFieldsKeyDelete :: Newtype PayloadPreferencesDocAccessFieldsKeyDelete _
+
+newtype PayloadPreferencesDocAccessFieldsValue = PayloadPreferencesDocAccessFieldsValue
+  { create :: 
+    { 
+    }
+    -> (Maybe PayloadPreferencesDocAccessFieldsValueCreate)
+  , read :: 
+    { 
+    }
+    -> (Maybe PayloadPreferencesDocAccessFieldsValueRead)
+  , update :: 
+    { 
+    }
+    -> (Maybe PayloadPreferencesDocAccessFieldsValueUpdate)
+  , delete :: 
+    { 
+    }
+    -> (Maybe PayloadPreferencesDocAccessFieldsValueDelete)
+  }
+derive instance newtypePayloadPreferencesDocAccessFieldsValue :: Newtype PayloadPreferencesDocAccessFieldsValue _
+
+newtype PayloadPreferencesDocAccessFieldsValueCreate = PayloadPreferencesDocAccessFieldsValueCreate
+  { permission :: 
+    { 
+    }
+    -> Boolean
+  }
+derive instance newtypePayloadPreferencesDocAccessFieldsValueCreate :: Newtype PayloadPreferencesDocAccessFieldsValueCreate _
+
+newtype PayloadPreferencesDocAccessFieldsValueRead = PayloadPreferencesDocAccessFieldsValueRead
+  { permission :: 
+    { 
+    }
+    -> Boolean
+  }
+derive instance newtypePayloadPreferencesDocAccessFieldsValueRead :: Newtype PayloadPreferencesDocAccessFieldsValueRead _
+
+newtype PayloadPreferencesDocAccessFieldsValueUpdate = PayloadPreferencesDocAccessFieldsValueUpdate
+  { permission :: 
+    { 
+    }
+    -> Boolean
+  }
+derive instance newtypePayloadPreferencesDocAccessFieldsValueUpdate :: Newtype PayloadPreferencesDocAccessFieldsValueUpdate _
+
+newtype PayloadPreferencesDocAccessFieldsValueDelete = PayloadPreferencesDocAccessFieldsValueDelete
+  { permission :: 
+    { 
+    }
+    -> Boolean
+  }
+derive instance newtypePayloadPreferencesDocAccessFieldsValueDelete :: Newtype PayloadPreferencesDocAccessFieldsValueDelete _
+
+newtype PayloadPreferencesDocAccessFieldsUpdatedAt = PayloadPreferencesDocAccessFieldsUpdatedAt
+  { create :: 
+    { 
+    }
+    -> (Maybe PayloadPreferencesDocAccessFieldsUpdatedAtCreate)
+  , read :: 
+    { 
+    }
+    -> (Maybe PayloadPreferencesDocAccessFieldsUpdatedAtRead)
+  , update :: 
+    { 
+    }
+    -> (Maybe PayloadPreferencesDocAccessFieldsUpdatedAtUpdate)
+  , delete :: 
+    { 
+    }
+    -> (Maybe PayloadPreferencesDocAccessFieldsUpdatedAtDelete)
+  }
+derive instance newtypePayloadPreferencesDocAccessFieldsUpdatedAt :: Newtype PayloadPreferencesDocAccessFieldsUpdatedAt _
+
+newtype PayloadPreferencesDocAccessFieldsUpdatedAtCreate = PayloadPreferencesDocAccessFieldsUpdatedAtCreate
+  { permission :: 
+    { 
+    }
+    -> Boolean
+  }
+derive instance newtypePayloadPreferencesDocAccessFieldsUpdatedAtCreate :: Newtype PayloadPreferencesDocAccessFieldsUpdatedAtCreate _
+
+newtype PayloadPreferencesDocAccessFieldsUpdatedAtRead = PayloadPreferencesDocAccessFieldsUpdatedAtRead
+  { permission :: 
+    { 
+    }
+    -> Boolean
+  }
+derive instance newtypePayloadPreferencesDocAccessFieldsUpdatedAtRead :: Newtype PayloadPreferencesDocAccessFieldsUpdatedAtRead _
+
+newtype PayloadPreferencesDocAccessFieldsUpdatedAtUpdate = PayloadPreferencesDocAccessFieldsUpdatedAtUpdate
+  { permission :: 
+    { 
+    }
+    -> Boolean
+  }
+derive instance newtypePayloadPreferencesDocAccessFieldsUpdatedAtUpdate :: Newtype PayloadPreferencesDocAccessFieldsUpdatedAtUpdate _
+
+newtype PayloadPreferencesDocAccessFieldsUpdatedAtDelete = PayloadPreferencesDocAccessFieldsUpdatedAtDelete
+  { permission :: 
+    { 
+    }
+    -> Boolean
+  }
+derive instance newtypePayloadPreferencesDocAccessFieldsUpdatedAtDelete :: Newtype PayloadPreferencesDocAccessFieldsUpdatedAtDelete _
+
+newtype PayloadPreferencesDocAccessFieldsCreatedAt = PayloadPreferencesDocAccessFieldsCreatedAt
+  { create :: 
+    { 
+    }
+    -> (Maybe PayloadPreferencesDocAccessFieldsCreatedAtCreate)
+  , read :: 
+    { 
+    }
+    -> (Maybe PayloadPreferencesDocAccessFieldsCreatedAtRead)
+  , update :: 
+    { 
+    }
+    -> (Maybe PayloadPreferencesDocAccessFieldsCreatedAtUpdate)
+  , delete :: 
+    { 
+    }
+    -> (Maybe PayloadPreferencesDocAccessFieldsCreatedAtDelete)
+  }
+derive instance newtypePayloadPreferencesDocAccessFieldsCreatedAt :: Newtype PayloadPreferencesDocAccessFieldsCreatedAt _
+
+newtype PayloadPreferencesDocAccessFieldsCreatedAtCreate = PayloadPreferencesDocAccessFieldsCreatedAtCreate
+  { permission :: 
+    { 
+    }
+    -> Boolean
+  }
+derive instance newtypePayloadPreferencesDocAccessFieldsCreatedAtCreate :: Newtype PayloadPreferencesDocAccessFieldsCreatedAtCreate _
+
+newtype PayloadPreferencesDocAccessFieldsCreatedAtRead = PayloadPreferencesDocAccessFieldsCreatedAtRead
+  { permission :: 
+    { 
+    }
+    -> Boolean
+  }
+derive instance newtypePayloadPreferencesDocAccessFieldsCreatedAtRead :: Newtype PayloadPreferencesDocAccessFieldsCreatedAtRead _
+
+newtype PayloadPreferencesDocAccessFieldsCreatedAtUpdate = PayloadPreferencesDocAccessFieldsCreatedAtUpdate
+  { permission :: 
+    { 
+    }
+    -> Boolean
+  }
+derive instance newtypePayloadPreferencesDocAccessFieldsCreatedAtUpdate :: Newtype PayloadPreferencesDocAccessFieldsCreatedAtUpdate _
+
+newtype PayloadPreferencesDocAccessFieldsCreatedAtDelete = PayloadPreferencesDocAccessFieldsCreatedAtDelete
+  { permission :: 
+    { 
+    }
+    -> Boolean
+  }
+derive instance newtypePayloadPreferencesDocAccessFieldsCreatedAtDelete :: Newtype PayloadPreferencesDocAccessFieldsCreatedAtDelete _
+
+newtype PayloadPreferencesCreateDocAccess = PayloadPreferencesCreateDocAccess
+  { permission :: 
+    { 
+    }
+    -> Boolean
+  , where :: 
+    { 
+    }
+    -> (Maybe JsonObject)
+  }
+derive instance newtypePayloadPreferencesCreateDocAccess :: Newtype PayloadPreferencesCreateDocAccess _
+
+newtype PayloadPreferencesReadDocAccess = PayloadPreferencesReadDocAccess
+  { permission :: 
+    { 
+    }
+    -> Boolean
+  , where :: 
+    { 
+    }
+    -> (Maybe JsonObject)
+  }
+derive instance newtypePayloadPreferencesReadDocAccess :: Newtype PayloadPreferencesReadDocAccess _
+
+newtype PayloadPreferencesUpdateDocAccess = PayloadPreferencesUpdateDocAccess
+  { permission :: 
+    { 
+    }
+    -> Boolean
+  , where :: 
+    { 
+    }
+    -> (Maybe JsonObject)
+  }
+derive instance newtypePayloadPreferencesUpdateDocAccess :: Newtype PayloadPreferencesUpdateDocAccess _
+
+newtype PayloadPreferencesDeleteDocAccess = PayloadPreferencesDeleteDocAccess
+  { permission :: 
+    { 
+    }
+    -> Boolean
+  , where :: 
+    { 
+    }
+    -> (Maybe JsonObject)
+  }
+derive instance newtypePayloadPreferencesDeleteDocAccess :: Newtype PayloadPreferencesDeleteDocAccess _
 
 newtype Access = Access
   { canAccessAdmin :: 
@@ -4029,6 +4576,10 @@ newtype Access = Access
     { 
     }
     -> (Maybe MediaAccess)
+  , payload_preferences :: 
+    { 
+    }
+    -> (Maybe PayloadPreferencesAccess)
   }
 derive instance newtypeAccess :: Newtype Access _
 
@@ -6692,6 +7243,362 @@ newtype MediaDeleteAccess = MediaDeleteAccess
   }
 derive instance newtypeMediaDeleteAccess :: Newtype MediaDeleteAccess _
 
+newtype PayloadPreferencesAccess = PayloadPreferencesAccess
+  { fields :: 
+    { 
+    }
+    -> (Maybe PayloadPreferencesFields)
+  , create :: 
+    { 
+    }
+    -> (Maybe PayloadPreferencesCreateAccess)
+  , read :: 
+    { 
+    }
+    -> (Maybe PayloadPreferencesReadAccess)
+  , update :: 
+    { 
+    }
+    -> (Maybe PayloadPreferencesUpdateAccess)
+  , delete :: 
+    { 
+    }
+    -> (Maybe PayloadPreferencesDeleteAccess)
+  }
+derive instance newtypePayloadPreferencesAccess :: Newtype PayloadPreferencesAccess _
+
+newtype PayloadPreferencesFields = PayloadPreferencesFields
+  { user :: 
+    { 
+    }
+    -> (Maybe PayloadPreferencesFieldsUser)
+  , key :: 
+    { 
+    }
+    -> (Maybe PayloadPreferencesFieldsKey)
+  , value :: 
+    { 
+    }
+    -> (Maybe PayloadPreferencesFieldsValue)
+  , updatedAt :: 
+    { 
+    }
+    -> (Maybe PayloadPreferencesFieldsUpdatedAt)
+  , createdAt :: 
+    { 
+    }
+    -> (Maybe PayloadPreferencesFieldsCreatedAt)
+  }
+derive instance newtypePayloadPreferencesFields :: Newtype PayloadPreferencesFields _
+
+newtype PayloadPreferencesFieldsUser = PayloadPreferencesFieldsUser
+  { create :: 
+    { 
+    }
+    -> (Maybe PayloadPreferencesFieldsUserCreate)
+  , read :: 
+    { 
+    }
+    -> (Maybe PayloadPreferencesFieldsUserRead)
+  , update :: 
+    { 
+    }
+    -> (Maybe PayloadPreferencesFieldsUserUpdate)
+  , delete :: 
+    { 
+    }
+    -> (Maybe PayloadPreferencesFieldsUserDelete)
+  }
+derive instance newtypePayloadPreferencesFieldsUser :: Newtype PayloadPreferencesFieldsUser _
+
+newtype PayloadPreferencesFieldsUserCreate = PayloadPreferencesFieldsUserCreate
+  { permission :: 
+    { 
+    }
+    -> Boolean
+  }
+derive instance newtypePayloadPreferencesFieldsUserCreate :: Newtype PayloadPreferencesFieldsUserCreate _
+
+newtype PayloadPreferencesFieldsUserRead = PayloadPreferencesFieldsUserRead
+  { permission :: 
+    { 
+    }
+    -> Boolean
+  }
+derive instance newtypePayloadPreferencesFieldsUserRead :: Newtype PayloadPreferencesFieldsUserRead _
+
+newtype PayloadPreferencesFieldsUserUpdate = PayloadPreferencesFieldsUserUpdate
+  { permission :: 
+    { 
+    }
+    -> Boolean
+  }
+derive instance newtypePayloadPreferencesFieldsUserUpdate :: Newtype PayloadPreferencesFieldsUserUpdate _
+
+newtype PayloadPreferencesFieldsUserDelete = PayloadPreferencesFieldsUserDelete
+  { permission :: 
+    { 
+    }
+    -> Boolean
+  }
+derive instance newtypePayloadPreferencesFieldsUserDelete :: Newtype PayloadPreferencesFieldsUserDelete _
+
+newtype PayloadPreferencesFieldsKey = PayloadPreferencesFieldsKey
+  { create :: 
+    { 
+    }
+    -> (Maybe PayloadPreferencesFieldsKeyCreate)
+  , read :: 
+    { 
+    }
+    -> (Maybe PayloadPreferencesFieldsKeyRead)
+  , update :: 
+    { 
+    }
+    -> (Maybe PayloadPreferencesFieldsKeyUpdate)
+  , delete :: 
+    { 
+    }
+    -> (Maybe PayloadPreferencesFieldsKeyDelete)
+  }
+derive instance newtypePayloadPreferencesFieldsKey :: Newtype PayloadPreferencesFieldsKey _
+
+newtype PayloadPreferencesFieldsKeyCreate = PayloadPreferencesFieldsKeyCreate
+  { permission :: 
+    { 
+    }
+    -> Boolean
+  }
+derive instance newtypePayloadPreferencesFieldsKeyCreate :: Newtype PayloadPreferencesFieldsKeyCreate _
+
+newtype PayloadPreferencesFieldsKeyRead = PayloadPreferencesFieldsKeyRead
+  { permission :: 
+    { 
+    }
+    -> Boolean
+  }
+derive instance newtypePayloadPreferencesFieldsKeyRead :: Newtype PayloadPreferencesFieldsKeyRead _
+
+newtype PayloadPreferencesFieldsKeyUpdate = PayloadPreferencesFieldsKeyUpdate
+  { permission :: 
+    { 
+    }
+    -> Boolean
+  }
+derive instance newtypePayloadPreferencesFieldsKeyUpdate :: Newtype PayloadPreferencesFieldsKeyUpdate _
+
+newtype PayloadPreferencesFieldsKeyDelete = PayloadPreferencesFieldsKeyDelete
+  { permission :: 
+    { 
+    }
+    -> Boolean
+  }
+derive instance newtypePayloadPreferencesFieldsKeyDelete :: Newtype PayloadPreferencesFieldsKeyDelete _
+
+newtype PayloadPreferencesFieldsValue = PayloadPreferencesFieldsValue
+  { create :: 
+    { 
+    }
+    -> (Maybe PayloadPreferencesFieldsValueCreate)
+  , read :: 
+    { 
+    }
+    -> (Maybe PayloadPreferencesFieldsValueRead)
+  , update :: 
+    { 
+    }
+    -> (Maybe PayloadPreferencesFieldsValueUpdate)
+  , delete :: 
+    { 
+    }
+    -> (Maybe PayloadPreferencesFieldsValueDelete)
+  }
+derive instance newtypePayloadPreferencesFieldsValue :: Newtype PayloadPreferencesFieldsValue _
+
+newtype PayloadPreferencesFieldsValueCreate = PayloadPreferencesFieldsValueCreate
+  { permission :: 
+    { 
+    }
+    -> Boolean
+  }
+derive instance newtypePayloadPreferencesFieldsValueCreate :: Newtype PayloadPreferencesFieldsValueCreate _
+
+newtype PayloadPreferencesFieldsValueRead = PayloadPreferencesFieldsValueRead
+  { permission :: 
+    { 
+    }
+    -> Boolean
+  }
+derive instance newtypePayloadPreferencesFieldsValueRead :: Newtype PayloadPreferencesFieldsValueRead _
+
+newtype PayloadPreferencesFieldsValueUpdate = PayloadPreferencesFieldsValueUpdate
+  { permission :: 
+    { 
+    }
+    -> Boolean
+  }
+derive instance newtypePayloadPreferencesFieldsValueUpdate :: Newtype PayloadPreferencesFieldsValueUpdate _
+
+newtype PayloadPreferencesFieldsValueDelete = PayloadPreferencesFieldsValueDelete
+  { permission :: 
+    { 
+    }
+    -> Boolean
+  }
+derive instance newtypePayloadPreferencesFieldsValueDelete :: Newtype PayloadPreferencesFieldsValueDelete _
+
+newtype PayloadPreferencesFieldsUpdatedAt = PayloadPreferencesFieldsUpdatedAt
+  { create :: 
+    { 
+    }
+    -> (Maybe PayloadPreferencesFieldsUpdatedAtCreate)
+  , read :: 
+    { 
+    }
+    -> (Maybe PayloadPreferencesFieldsUpdatedAtRead)
+  , update :: 
+    { 
+    }
+    -> (Maybe PayloadPreferencesFieldsUpdatedAtUpdate)
+  , delete :: 
+    { 
+    }
+    -> (Maybe PayloadPreferencesFieldsUpdatedAtDelete)
+  }
+derive instance newtypePayloadPreferencesFieldsUpdatedAt :: Newtype PayloadPreferencesFieldsUpdatedAt _
+
+newtype PayloadPreferencesFieldsUpdatedAtCreate = PayloadPreferencesFieldsUpdatedAtCreate
+  { permission :: 
+    { 
+    }
+    -> Boolean
+  }
+derive instance newtypePayloadPreferencesFieldsUpdatedAtCreate :: Newtype PayloadPreferencesFieldsUpdatedAtCreate _
+
+newtype PayloadPreferencesFieldsUpdatedAtRead = PayloadPreferencesFieldsUpdatedAtRead
+  { permission :: 
+    { 
+    }
+    -> Boolean
+  }
+derive instance newtypePayloadPreferencesFieldsUpdatedAtRead :: Newtype PayloadPreferencesFieldsUpdatedAtRead _
+
+newtype PayloadPreferencesFieldsUpdatedAtUpdate = PayloadPreferencesFieldsUpdatedAtUpdate
+  { permission :: 
+    { 
+    }
+    -> Boolean
+  }
+derive instance newtypePayloadPreferencesFieldsUpdatedAtUpdate :: Newtype PayloadPreferencesFieldsUpdatedAtUpdate _
+
+newtype PayloadPreferencesFieldsUpdatedAtDelete = PayloadPreferencesFieldsUpdatedAtDelete
+  { permission :: 
+    { 
+    }
+    -> Boolean
+  }
+derive instance newtypePayloadPreferencesFieldsUpdatedAtDelete :: Newtype PayloadPreferencesFieldsUpdatedAtDelete _
+
+newtype PayloadPreferencesFieldsCreatedAt = PayloadPreferencesFieldsCreatedAt
+  { create :: 
+    { 
+    }
+    -> (Maybe PayloadPreferencesFieldsCreatedAtCreate)
+  , read :: 
+    { 
+    }
+    -> (Maybe PayloadPreferencesFieldsCreatedAtRead)
+  , update :: 
+    { 
+    }
+    -> (Maybe PayloadPreferencesFieldsCreatedAtUpdate)
+  , delete :: 
+    { 
+    }
+    -> (Maybe PayloadPreferencesFieldsCreatedAtDelete)
+  }
+derive instance newtypePayloadPreferencesFieldsCreatedAt :: Newtype PayloadPreferencesFieldsCreatedAt _
+
+newtype PayloadPreferencesFieldsCreatedAtCreate = PayloadPreferencesFieldsCreatedAtCreate
+  { permission :: 
+    { 
+    }
+    -> Boolean
+  }
+derive instance newtypePayloadPreferencesFieldsCreatedAtCreate :: Newtype PayloadPreferencesFieldsCreatedAtCreate _
+
+newtype PayloadPreferencesFieldsCreatedAtRead = PayloadPreferencesFieldsCreatedAtRead
+  { permission :: 
+    { 
+    }
+    -> Boolean
+  }
+derive instance newtypePayloadPreferencesFieldsCreatedAtRead :: Newtype PayloadPreferencesFieldsCreatedAtRead _
+
+newtype PayloadPreferencesFieldsCreatedAtUpdate = PayloadPreferencesFieldsCreatedAtUpdate
+  { permission :: 
+    { 
+    }
+    -> Boolean
+  }
+derive instance newtypePayloadPreferencesFieldsCreatedAtUpdate :: Newtype PayloadPreferencesFieldsCreatedAtUpdate _
+
+newtype PayloadPreferencesFieldsCreatedAtDelete = PayloadPreferencesFieldsCreatedAtDelete
+  { permission :: 
+    { 
+    }
+    -> Boolean
+  }
+derive instance newtypePayloadPreferencesFieldsCreatedAtDelete :: Newtype PayloadPreferencesFieldsCreatedAtDelete _
+
+newtype PayloadPreferencesCreateAccess = PayloadPreferencesCreateAccess
+  { permission :: 
+    { 
+    }
+    -> Boolean
+  , where :: 
+    { 
+    }
+    -> (Maybe JsonObject)
+  }
+derive instance newtypePayloadPreferencesCreateAccess :: Newtype PayloadPreferencesCreateAccess _
+
+newtype PayloadPreferencesReadAccess = PayloadPreferencesReadAccess
+  { permission :: 
+    { 
+    }
+    -> Boolean
+  , where :: 
+    { 
+    }
+    -> (Maybe JsonObject)
+  }
+derive instance newtypePayloadPreferencesReadAccess :: Newtype PayloadPreferencesReadAccess _
+
+newtype PayloadPreferencesUpdateAccess = PayloadPreferencesUpdateAccess
+  { permission :: 
+    { 
+    }
+    -> Boolean
+  , where :: 
+    { 
+    }
+    -> (Maybe JsonObject)
+  }
+derive instance newtypePayloadPreferencesUpdateAccess :: Newtype PayloadPreferencesUpdateAccess _
+
+newtype PayloadPreferencesDeleteAccess = PayloadPreferencesDeleteAccess
+  { permission :: 
+    { 
+    }
+    -> Boolean
+  , where :: 
+    { 
+    }
+    -> (Maybe JsonObject)
+  }
+derive instance newtypePayloadPreferencesDeleteAccess :: Newtype PayloadPreferencesDeleteAccess _
+
 newtype Mutation = Mutation
   { createCategory :: 
     { data :: (NotNull MutationCategoryInput)
@@ -6701,9 +7608,9 @@ newtype Mutation = Mutation
     -> (Maybe Category)
   , updateCategory :: 
     { id :: (NotNull String)
+    , autosave :: Boolean
     , data :: (NotNull MutationCategoryUpdateInput)
     , draft :: Boolean
-    , autosave :: Boolean
     , locale :: LocaleInputType
     }
     -> (Maybe Category)
@@ -6719,9 +7626,9 @@ newtype Mutation = Mutation
     -> (Maybe Post)
   , updatePost :: 
     { id :: (NotNull String)
+    , autosave :: Boolean
     , data :: (NotNull MutationPostUpdateInput)
     , draft :: Boolean
-    , autosave :: Boolean
     , locale :: LocaleInputType
     }
     -> (Maybe Post)
@@ -6737,9 +7644,9 @@ newtype Mutation = Mutation
     -> (Maybe Tag)
   , updateTag :: 
     { id :: (NotNull String)
+    , autosave :: Boolean
     , data :: (NotNull MutationTagUpdateInput)
     , draft :: Boolean
-    , autosave :: Boolean
     , locale :: LocaleInputType
     }
     -> (Maybe Tag)
@@ -6755,9 +7662,9 @@ newtype Mutation = Mutation
     -> (Maybe User)
   , updateUser :: 
     { id :: (NotNull String)
+    , autosave :: Boolean
     , data :: (NotNull MutationUserUpdateInput)
     , draft :: Boolean
-    , autosave :: Boolean
     , locale :: LocaleInputType
     }
     -> (Maybe User)
@@ -6783,14 +7690,14 @@ newtype Mutation = Mutation
     }
     -> (Maybe UsersLoginResult)
   , forgotPasswordUser :: 
-    { email :: (NotNull String)
-    , disableEmail :: Boolean
+    { disableEmail :: Boolean
+    , email :: (NotNull String)
     , expiration :: Int
     }
     -> Boolean
   , resetPasswordUser :: 
-    { token :: String
-    , password :: String
+    { password :: String
+    , token :: String
     }
     -> (Maybe UsersResetPassword)
   , verifyEmailUser :: 
@@ -6805,9 +7712,9 @@ newtype Mutation = Mutation
     -> (Maybe Media)
   , updateMedia :: 
     { id :: (NotNull String)
+    , autosave :: Boolean
     , data :: (NotNull MutationMediaUpdateInput)
     , draft :: Boolean
-    , autosave :: Boolean
     , locale :: LocaleInputType
     }
     -> (Maybe Media)
@@ -6815,15 +7722,24 @@ newtype Mutation = Mutation
     { id :: (NotNull String)
     }
     -> (Maybe Media)
-  , updatePreference :: 
-    { key :: (NotNull String)
-    , value :: Json
+  , createPayloadPreference :: 
+    { data :: (NotNull MutationPayloadPreferenceInput)
+    , draft :: Boolean
+    , locale :: LocaleInputType
     }
-    -> (Maybe Preference)
-  , deletePreference :: 
-    { key :: (NotNull String)
+    -> (Maybe PayloadPreference)
+  , updatePayloadPreference :: 
+    { id :: (NotNull String)
+    , autosave :: Boolean
+    , data :: (NotNull MutationPayloadPreferenceUpdateInput)
+    , draft :: Boolean
+    , locale :: LocaleInputType
     }
-    -> (Maybe Preference)
+    -> (Maybe PayloadPreference)
+  , deletePayloadPreference :: 
+    { id :: (NotNull String)
+    }
+    -> (Maybe PayloadPreference)
   }
 derive instance newtypeMutation :: Newtype Mutation _
 
@@ -6839,8 +7755,8 @@ derive instance newtypeMutationCategoryUpdateInput :: Newtype MutationCategoryUp
 
 newtype MutationPostInput = MutationPostInput
   { title :: String
-  , author :: String
-  , translator :: String
+  , author :: (Array String)
+  , translator :: (Array String)
   , publishedDate :: String
   , category :: String
   , tags :: (Array String)
@@ -6853,8 +7769,8 @@ derive instance newtypeMutationPostInput :: Newtype MutationPostInput _
 
 newtype MutationPostUpdateInput = MutationPostUpdateInput
   { title :: String
-  , author :: String
-  , translator :: String
+  , author :: (Array String)
+  , translator :: (Array String)
   , publishedDate :: String
   , category :: String
   , tags :: (Array String)
@@ -6906,18 +7822,18 @@ newtype MutationUserUpdateInput = MutationUserUpdateInput
 derive instance newtypeMutationUserUpdateInput :: Newtype MutationUserUpdateInput _
 
 newtype UsersRefreshedUser = UsersRefreshedUser
-  { user :: 
+  { exp :: 
     { 
     }
-    -> (Maybe UsersJwt)
+    -> (Maybe Int)
   , refreshedToken :: 
     { 
     }
     -> (Maybe String)
-  , exp :: 
+  , user :: 
     { 
     }
-    -> (Maybe Int)
+    -> (Maybe UsersJwt)
   }
 derive instance newtypeUsersRefreshedUser :: Newtype UsersRefreshedUser _
 
@@ -6934,7 +7850,11 @@ newtype UsersJwt = UsersJwt
 derive instance newtypeUsersJwt :: Newtype UsersJwt _
 
 newtype UsersLoginResult = UsersLoginResult
-  { token :: 
+  { exp :: 
+    { 
+    }
+    -> (Maybe Int)
+  , token :: 
     { 
     }
     -> (Maybe String)
@@ -6942,10 +7862,6 @@ newtype UsersLoginResult = UsersLoginResult
     { 
     }
     -> (Maybe User)
-  , exp :: 
-    { 
-    }
-    -> (Maybe Int)
   }
 derive instance newtypeUsersLoginResult :: Newtype UsersLoginResult _
 
@@ -7038,3 +7954,33 @@ newtype MutationMediaUpdateSizesSixteenByNineMediumInput = MutationMediaUpdateSi
   , filename :: String
   }
 derive instance newtypeMutationMediaUpdateSizesSixteenByNineMediumInput :: Newtype MutationMediaUpdateSizesSixteenByNineMediumInput _
+
+newtype MutationPayloadPreferenceInput = MutationPayloadPreferenceInput
+  { user :: PayloadPreferenceUserRelationshipInput
+  , key :: String
+  , value :: Json
+  , updatedAt :: String
+  , createdAt :: String
+  }
+derive instance newtypeMutationPayloadPreferenceInput :: Newtype MutationPayloadPreferenceInput _
+
+newtype PayloadPreferenceUserRelationshipInput = PayloadPreferenceUserRelationshipInput
+  { relationTo :: PayloadPreferenceUserRelationshipInputRelationTo
+  , value :: Json
+  }
+derive instance newtypePayloadPreferenceUserRelationshipInput :: Newtype PayloadPreferenceUserRelationshipInput _
+
+newtype MutationPayloadPreferenceUpdateInput = MutationPayloadPreferenceUpdateInput
+  { user :: PayloadPreferenceUpdateUserRelationshipInput
+  , key :: String
+  , value :: Json
+  , updatedAt :: String
+  , createdAt :: String
+  }
+derive instance newtypeMutationPayloadPreferenceUpdateInput :: Newtype MutationPayloadPreferenceUpdateInput _
+
+newtype PayloadPreferenceUpdateUserRelationshipInput = PayloadPreferenceUpdateUserRelationshipInput
+  { relationTo :: PayloadPreferenceUpdateUserRelationshipInputRelationTo
+  , value :: Json
+  }
+derive instance newtypePayloadPreferenceUpdateUserRelationshipInput :: Newtype PayloadPreferenceUpdateUserRelationshipInput _
